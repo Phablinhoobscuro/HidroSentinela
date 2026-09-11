@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#07131f" />
+  <title>HidroSentinela v0.2 — Protótipo Mobile</title>
+
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="prototype-frame">
+    <div class="prototype-warning">
+      PROTÓTIPO ACADÊMICO • DADOS SIMULADOS • NÃO SUBSTITUI ALERTAS OFICIAIS
+    </div>
+
+    <main id="app" class="app-shell" aria-label="Protótipo mobile HidroSentinela">
+      <section id="screen-map" class="screen active">
+        <div id="map" aria-label="Mapa de risco simulado"></div>
+
+        <header class="top-overlay">
+          <div class="brand-row">
+            <div class="brand">
+              <div class="brand-mark" aria-hidden="true">
+                <span class="drop">◆</span>
+                <span class="wave">≈</span>
+              </div>
+              <div>
+                <h1>Hidro<span>Sentinela</span></h1>
+                <small>informação que protege</small>
+              </div>
+            </div>
+
+            <button id="risk-pill" class="risk-pill risk-high" type="button" data-action="risk-details">
+              <span class="risk-icon">!</span>
+              <span id="risk-label">Risco alto</span>
+            </button>
+          </div>
+
+          <div class="metrics-row">
+            <button class="metric-card" type="button" data-action="risk-details">
+              <span class="metric-icon">🌧️</span>
+              <span>
+                <small>Chuva</small>
+                <strong id="rain-value">48 mm</strong>
+              </span>
+            </button>
+
+            <button class="metric-card" type="button" data-action="risk-details">
+              <span class="metric-icon">🌊</span>
+              <span>
+                <small>Rio Formate</small>
+                <strong id="river-value">subindo</strong>
+              </span>
+            </button>
+
+            <div class="update-card">
+              <small>Atualizado</small>
+              <strong id="update-value">há 8 min</strong>
+            </div>
+          </div>
+
+          <div class="quick-actions">
+            <button class="quick-button active" type="button" data-layer="risk">
+              <span>🗺️</span>
+              <span><strong>Mapa de risco</strong><small>Enchentes</small></span>
+            </button>
+            <button class="quick-button" type="button" data-action="shelters">
+              <span>🏠</span>
+              <span><strong>Abrigos</strong><small>Mais próximos</small></span>
+            </button>
+            <button class="quick-button" type="button" data-action="routes">
+              <span>🧭</span>
+              <span><strong>Rotas seguras</strong><small>Evite alagamentos</small></span>
+            </button>
+          </div>
+        </header>
+
+        <div class="region-callout">
+          <span>📍</span>
+          <div>
+            <strong id="region-name">Cariacica / Vila Velha</strong>
+            <small>Toque no mapa para explorar</small>
+          </div>
+        </div>
+
+        <div class="map-tools" aria-label="Ferramentas do mapa">
+          <button type="button" title="Centralizar mapa" data-action="center">⌂</button>
+          <button type="button" title="Pesquisar região" data-action="search">⌕</button>
+          <button type="button" title="Camadas" data-action="layers">▱</button>
+          <button type="button" title="Favoritar região" data-action="favorite" id="favorite-btn">♡</button>
+          <button type="button" class="alert-tool" title="Alertas" data-nav="alerts">!</button>
+        </div>
+
+        <button class="map-menu-button" type="button" data-action="layers" aria-label="Abrir camadas">
+          ☰
+        </button>
+
+        <div id="map-hint" class="map-hint hidden" role="status"></div>
+
+        <section class="timeline-panel" aria-label="Linha do tempo simulada">
+          <div class="timeline-header">
+            <button id="play-btn" class="play-button" type="button" aria-label="Reproduzir evolução">▶</button>
+            <div>
+              <strong id="timeline-day">Sexta-feira 11</strong>
+              <small>Evolução simulada do risco</small>
+            </div>
+            <span id="time-bubble" class="time-bubble">15:00</span>
+          </div>
+
+          <div id="timeline" class="timeline"></div>
+
+          <div class="risk-legend">
+            <span>Baixo</span>
+            <div class="gradient-bar"></div>
+            <span>Muito alto</span>
+          </div>
+        </section>
+      </section>
+
+      <section id="screen-home" class="screen content-screen">
+        <header class="content-header">
+          <div>
+            <small>Resumo da sua região</small>
+            <h2>Início</h2>
+          </div>
+          <span class="prototype-chip">simulado</span>
+        </header>
+
+        <article class="hero-status risk-high-bg">
+          <div>
+            <small id="home-region">Cariacica / Vila Velha</small>
+            <h3 id="home-risk">Risco alto</h3>
+            <p id="home-summary">
+              Há condições favoráveis a alagamentos nas próximas horas.
+            </p>
+          </div>
+          <button type="button" data-nav="map">Ver mapa</button>
+        </article>
+
+        <div class="dashboard-grid">
+          <article class="info-card">
+            <small>Chuva acumulada</small>
+            <strong id="home-rain">48 mm</strong>
+            <span>últimas 6h</span>
+          </article>
+          <article class="info-card">
+            <small>Nível do rio</small>
+            <strong id="home-river">3,7 m</strong>
+            <span id="home-river-trend">subindo</span>
+          </article>
+          <article class="info-card">
+            <small>Vias afetadas</small>
+            <strong>3</strong>
+            <span>2 em atenção</span>
+          </article>
+          <article class="info-card">
+            <small>Abrigos</small>
+            <strong>2</strong>
+            <span>disponíveis</span>
+          </article>
+        </div>
+
+        <article class="section-card">
+          <div class="section-title">
+            <div>
+              <small>Entenda a situação</small>
+              <h3>Por que existe risco?</h3>
+            </div>
+            <span>?</span>
+          </div>
+          <ul id="risk-reasons" class="simple-list"></ul>
+          <button class="text-button" type="button" data-action="risk-details">
+            Ver detalhes técnicos
+          </button>
+        </article>
+
+        <article class="section-card">
+          <div class="section-title">
+            <div>
+              <small>Orientação</small>
+              <h3>O que fazer agora?</h3>
+            </div>
+            <span>🛟</span>
+          </div>
+          <ul id="orientation-list" class="orientation-list"></ul>
+        </article>
+      </section>
+
+      <section id="screen-alerts" class="screen content-screen">
+        <header class="content-header">
+          <div>
+            <small>Eventos simulados</small>
+            <h2>Alertas</h2>
+          </div>
+          <span class="prototype-chip">3 ativos</span>
+        </header>
+        <div id="alerts-list" class="stack-list"></div>
+      </section>
+
+      <section id="screen-places" class="screen content-screen">
+        <header class="content-header">
+          <div>
+            <small>Regiões acompanhadas</small>
+            <h2>Locais</h2>
+          </div>
+          <button class="small-icon-button" id="add-place-btn" type="button">＋</button>
+        </header>
+        <div id="places-list" class="stack-list"></div>
+      </section>
+
+      <section id="screen-more" class="screen content-screen">
+        <header class="content-header">
+          <div>
+            <small>Sobre o protótipo</small>
+            <h2>Mais</h2>
+          </div>
+        </header>
+
+        <article class="section-card">
+          <h3>Fontes previstas</h3>
+          <p>
+            Em uma versão real, a plataforma poderá integrar dados públicos de órgãos como
+            CEMADEN, SGB/SACE, INMET e Defesa Civil. Nesta versão, todos os dados são fictícios.
+          </p>
+        </article>
+
+        <article class="section-card">
+          <h3>Contatos de emergência</h3>
+          <div class="contact-row"><span>Defesa Civil</span><strong>199</strong></div>
+          <div class="contact-row"><span>Corpo de Bombeiros</span><strong>193</strong></div>
+          <div class="contact-row"><span>SAMU</span><strong>192</strong></div>
+        </article>
+
+        <article class="section-card">
+          <h3>Sobre esta versão</h3>
+          <p>
+            HidroSentinela v0.2 — protótipo mobile do cidadão. Desenvolvido apenas com
+            HTML, CSS e JavaScript para validação visual e de navegação.
+          </p>
+        </article>
+      </section>
+
+      <nav class="bottom-nav" aria-label="Navegação principal">
+        <button type="button" data-nav="home">
+          <span>⌂</span><small>Início</small>
+        </button>
+        <button type="button" data-nav="map" class="active">
+          <span>🗺</span><small>Mapa</small>
+        </button>
+        <button type="button" data-nav="alerts">
+          <span>!</span><small>Alertas</small>
+        </button>
+        <button type="button" data-nav="places">
+          <span>◎</span><small>Locais</small>
+        </button>
+        <button type="button" data-nav="more">
+          <span>☰</span><small>Mais</small>
+        </button>
+      </nav>
+
+      <div id="modal-backdrop" class="modal-backdrop hidden"></div>
+
+      <aside id="bottom-sheet" class="bottom-sheet hidden" aria-live="polite">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+          <div>
+            <small id="sheet-kicker">HidroSentinela</small>
+            <h3 id="sheet-title">Detalhes</h3>
+          </div>
+          <button id="sheet-close" class="small-icon-button" type="button">×</button>
+        </div>
+        <div id="sheet-content" class="sheet-content"></div>
+      </aside>
+    </main>
+  </div>
+
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  ></script>
+  <script src="js/dados.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
