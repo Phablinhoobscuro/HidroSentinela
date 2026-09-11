@@ -1,0 +1,1796 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HidroSentinela - Observando a água. Protegendo vidas.</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* ============================================
+           DESIGN SYSTEM - HIDROSENTINELA
+           ============================================ */
+
+        :root {
+            /* Cores Principais */
+            --azul-petroleo: #006D77;
+            --azul-petroleo-escuro: #004D55;
+            --turquesa: #83C5BE;
+            --turquesa-claro: #EDF6F9;
+            --branco: #FFFFFF;
+            --cinza-claro: #F8F9FA;
+            --cinza-medio: #E9ECEF;
+            --cinza-escuro: #6C757D;
+            --preto: #212529;
+
+            /* Cores de Status */
+            --normal: #0077B6;
+            --atencao: #FFD166;
+            --cheia: #FB8500;
+            --risco: #D62828;
+            --muito-baixo: #6A4C93;
+            --critico: #9D0208;
+
+            /* Tipografia */
+            --fonte-principal: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+            /* Espaç««mento */
+            --espacamento-xs: 0.5rem;
+            --espacamento-sm: 1rem;
+            --espacamento-md: 1.5rem;
+            --espacamento-lg: 2rem;
+            --espacamento-xl: 3rem;
+
+            /* Bordas */
+            --borda-raio: 8px;
+            --borda-raio-lg: 12px;
+
+            /* Sombras */
+            --sombra-suave: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --sombra-media: 0 4px 16px rgba(0, 0, 0, 0.12);
+            --sombra-forte: 0 8px 32px rgba(0, 0, 0, 0.16);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--fonte-principal);
+            background-color: var(--cinza-claro);
+            color: var(--preto);
+            line-height: 1.6;
+        }
+
+        /* ============================================
+           COMPONENTES
+           ============================================ */
+
+        /* BotÃµes */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--borda-raio);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: var(--azul-petroleo);
+            color: var(--branco);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--azul-petroleo-escuro);
+            transform: translateY(-2px);
+            box-shadow: var(--sombra-media);
+        }
+
+        .btn-secondary {
+            background-color: var(--turquesa);
+            color: var(--preto);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--azul-petroleo);
+            color: var(--branco);
+        }
+
+        .btn-danger {
+            background-color: var(--risco);
+            color: var(--branco);
+        }
+
+        .btn-success {
+            background-color: #2E8B57;
+            color: var(--branco);
+        }
+
+        .btn-warning {
+            background-color: var(--atencao);
+            color: var(--preto);
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+
+        .btn-lg {
+            padding: 1rem 2rem;
+            font-size: 1.125rem;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--branco);
+            border-radius: var(--borda-raio-lg);
+            padding: var(--espacamento-md);
+            box-shadow: var(--sombra-suave);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: var(--sombra-media);
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--espacamento-sm);
+            padding-bottom: var(--espacamento-sm);
+            border-bottom: 2px solid var(--cinza-medio);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--azul-petroleo);
+        }
+
+        /* Cards de Status */
+        .card-status {
+            text-align: center;
+            padding: var(--espacamento-lg);
+        }
+
+        .card-status-icon {
+            font-size: 3rem;
+            margin-bottom: var(--espacamento-sm);
+        }
+
+        .card-status-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: var(--espacamento-xs);
+        }
+
+        .card-status-label {
+            font-size: 0.875rem;
+            color: var(--cinza-escuro);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-normal { background-color: var(--normal); color: var(--branco); }
+        .status-atencao { background-color: var(--atencao); color: var(--preto); }
+        .status-cheia { background-color: var(--cheia); color: var(--branco); }
+        .status-risco { background-color: var(--risco); color: var(--branco); }
+        .status-muito-baixo { background-color: var(--muito-baixo); color: var(--branco); }
+        .status-critico { background-color: var(--critico); color: var(--branco); }
+
+        /* Tabelas */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--branco);
+            border-radius: var(--borda-raio);
+            overflow: hidden;
+        }
+
+        .table thead {
+            background-color: var(--azul-petroleo);
+            color: var(--branco);
+        }
+
+        .table th,
+        .table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--cinza-medio);
+        }
+
+        .table tbody tr:hover {
+            background-color: var(--turquesa-claro);
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-normal { background-color: var(--normal); color: var(--branco); }
+        .badge-atencao { background-color: var(--atencao); color: var(--preto); }
+        .badge-alerta { background-color: var(--cheia); color: var(--branco); }
+        .badge-critico { background-color: var(--critico); color: var(--branco); }
+
+        /* FormulÃ¡rios */
+        .form-group {
+            margin-bottom: var(--espacamento-md);
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--azul-petroleo);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--cinza-medio);
+            border-radius: var(--borda-raio);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--azul-petroleo);
+            box-shadow: 0 0 0 3px rgba(0, 109, 119, 0.1);
+        }
+
+        .form-control::placeholder {
+            color: var(--cinza-escuro);
+        }
+
+        select.form-control {
+            cursor: pointer;
+        }
+
+        /* ============================================
+           LAYOUT
+           ============================================ */
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--azul-petroleo) 0%, var(--azul-petroleo-escuro) 100%);
+            color: var(--branco);
+            padding: var(--espacamento-sm) var(--espacamento-lg);
+            box-shadow: var(--sombra-media);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+            color: var(--branco);
+        }
+
+        .logo-icon {
+            font-size: 2.5rem;
+            color: var(--turquesa);
+        }
+
+        .logo-text h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .logo-text p {
+            font-size: 0.875rem;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: var(--espacamento-sm);
+            list-style: none;
+        }
+
+        .nav-menu a {
+            color: var(--branco);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: var(--borda-raio);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            background-color: var(--turquesa);
+            color: var(--preto);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--turquesa);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--preto);
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--espacamento-lg);
+        }
+
+        /* Grid System */
+        .grid {
+            display: grid;
+            gap: var(--espacamento-md);
+        }
+
+        .grid-2 { grid-template-columns: repeat(2, 1fr); }
+        .grid-3 { grid-template-columns: repeat(3, 1fr); }
+        .grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+        @media (max-width: 1024px) {
+            .grid-4 { grid-template-columns: repeat(2, 1fr); }
+            .grid-3 { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-menu {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+
+        /* ============================================
+           TELAS ESPECÃ�FICAS
+           ============================================ */
+
+        /* Login */
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--azul-petroleo) 0%, var(--turquesa) 100%);
+            padding: var(--espacamento-lg);
+        }
+
+        .login-box {
+            background: var(--branco);
+            padding: var(--espacamento-xl);
+            border-radius: var(--borda-raio-lg);
+            box-shadow: var(--sombra-forte);
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: var(--espacamento-lg);
+        }
+
+        .login-header .logo-icon {
+            font-size: 4rem;
+            margin-bottom: var(--espacamento-sm);
+        }
+
+        .login-header h2 {
+            color: var(--azul-petroleo);
+            margin-bottom: 0.5rem;
+        }
+
+        .login-header p {
+            color: var(--cinza-escuro);
+            font-style: italic;
+        }
+
+        /* Dashboard */
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--espacamento-md);
+            margin-bottom: var(--espacamento-lg);
+        }
+
+        .stat-card {
+            background: var(--branco);
+            padding: var(--espacamento-md);
+            border-radius: var(--borda-raio-lg);
+            box-shadow: var(--sombra-suave);
+            display: flex;
+            align-items: center;
+            gap: var(--espacamento-sm);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .stat-info h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-info p {
+            color: var(--cinza-escuro);
+            font-size: 0.875rem;
+        }
+
+        /* Alertas */
+        .alerta-item {
+            padding: var(--espacamento-sm);
+            border-left: 4px solid;
+            margin-bottom: var(--espacamento-sm);
+            background: var(--branco);
+            border-radius: 0 var(--borda-raio) var(--borda-raio) 0;
+        }
+
+        .alerta-critico { border-left-color: var(--critico); background: #FFF5F5; }
+        .alerta-alerta { border-left-color: var(--risco); background: #FFF5F5; }
+        .alerta-atencao { border-left-color: var(--atencao); background: #FFFBEB; }
+
+        .alerta-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .alerta-titulo {
+            font-weight: 700;
+            color: var(--preto);
+        }
+
+        .alerta-local {
+            color: var(--cinza-escuro);
+            font-size: 0.875rem;
+        }
+
+        /* Mapa */
+        .mapa-container {
+            height: 400px;
+            background: var(--cinza-medio);
+            border-radius: var(--borda-raio-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--cinza-escuro);
+            font-size: 1.25rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--branco);
+            padding: var(--espacamento-lg);
+            border-radius: var(--borda-raio-lg);
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--espacamento-md);
+            padding-bottom: var(--espacamento-sm);
+            border-bottom: 2px solid var(--cinza-medio);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--cinza-escuro);
+        }
+
+        .modal-close:hover {
+            color: var(--risco);
+        }
+
+        /* ============================================
+           UTILITÃ¡RIOS
+           ============================================ */
+
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+        .mb-1 { margin-bottom: 0.5rem; }
+        .mb-2 { margin-bottom: 1rem; }
+        .mb-3 { margin-bottom: 1.5rem; }
+        .mt-1 { margin-top: 0.5rem; }
+        .mt-2 { margin-top: 1rem; }
+        .mt-3 { margin-top: 1.5rem; }
+        .hidden { display: none; }
+
+        .flex { display: flex; }
+        .flex-between { justify-content: space-between; }
+        .flex-center { align-items: center; }
+        .gap-1 { gap: 0.5rem; }
+        .gap-2 { gap: 1rem; }
+
+        /* AnimaÃ§Ãµes */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .nav-menu {
+                justify-content: center;
+            }
+
+            .dashboard-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ============================================
+         TELA DE LOGIN
+         ============================================ -->
+    <div id="loginScreen" class="login-container">
+        <div class="login-box fade-in">
+            <div class="login-header">
+                <i class="fas fa-water logo-icon"></i>
+                <h2>HidroSentinela</h2>
+                <p>"Observando a água. Protegendo vidas."</p>
+            </div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label class="form-label" for="loginEmail">
+                        <i class="fas fa-envelope"></i> E-mail
+                    </label>
+                    <input 
+                        type="email" 
+                        id="loginEmail" 
+                        class="form-control" 
+                        placeholder="seu@email.com"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="loginSenha">
+                        <i class="fas fa-lock"></i> Senha
+                    </label>
+                    <input 
+                        type="password" 
+                        id="loginSenha" 
+                        class="form-control" 
+                        placeholder="••••••••"
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">
+                    <i class="fas fa-sign-in-alt"></i> Entrar
+                </button>
+            </form>
+
+            <div class="text-center mt-3">
+                <p style="color: var(--cinza-escuro); font-size: 0.875rem;">
+                    <strong>Dados de Teste:</strong><br>
+                    Admin: admin@hidrosentinela.com / admin123<br>
+                    Empresa: empresa@hidrosentinela.com / empresa123<br>
+                    FuncionÃ¡rio: func@hidrosentinela.com / func123<br>
+                    CidadÃ£o: cidadao@hidrosentinela.com / cidadao123
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         SISTEMA PRINCIPAL (Oculto inicialmente)
+         ============================================ -->
+    <div id="mainSystem" class="hidden">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <a href="#" class="logo" onclick="navegarPara('dashboard')">
+                    <i class="fas fa-water logo-icon"></i>
+                    <div class="logo-text">
+                        <h1>HidroSentinela</h1>
+                        <p>"Observando a água. Protegendo vidas."</p>
+                    </div>
+                </a>
+
+                <nav>
+                    <ul class="nav-menu" id="navMenu">
+                        <li><a href="#" onclick="navegarPara('dashboard')" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+                        <li><a href="#" onclick="navegarPara('locais')"><i class="fas fa-map-marker-alt"></i> Locais</a></li>
+                        <li><a href="#" onclick="navegarPara('medicoes')"><i class="fas fa-ruler-vertical"></i> MediÃ§Ãµes</a></li>
+                        <li><a href="#" onclick="navegarPara('alertas')"><i class="fas fa-bell"></i> Alertas</a></li>
+                        <li><a href="#" onclick="navegarPara('relatorios')"><i class="fas fa-file-alt"></i> RelatÃ³rios</a></li>
+                        <li id="menuAdmin"><a href="#" onclick="navegarPara('admin')"><i class="fas fa-cog"></i> Admin</a></li>
+                    </ul>
+                </nav>
+
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">A</div>
+                    <div>
+                        <strong id="userName">Admin</strong>
+                        <div style="font-size: 0.75rem; opacity: 0.8;" id="userRole">Administrador</div>
+                    </div>
+                    <button class="btn btn-sm btn-danger" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content" id="mainContent">
+            <!-- ConteÃºdo serÃ¡ injetado via JavaScript -->
+        </main>
+    </div>
+
+    <!-- ============================================
+         MODAIS
+         ============================================ -->
+
+    <!-- Modal Nova Medicao -->
+    <div id="modalMedicao" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-ruler-vertical"></i> Nova Medicao</h3>
+                <button class="modal-close" onclick="fecharModal('modalMedicao')">&times;</button>
+            </div>
+            <form id="formMedicao">
+                <div class="form-group">
+                    <label class="form-label">Local</label>
+                    <select id="medicaoLocal" class="form-control" required>
+                        <option value="">Selecione um local...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Data</label>
+                    <input type="date" id="medicaoData" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Hora</label>
+                    <input type="time" id="medicaoHora" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">NÃ¡vel Medido</label>
+                    <input type="number" step="0.01" id="medicaoNivel" class="form-control" placeholder="Ex: 2.45" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Unidade</label>
+                    <select id="medicaoUnidade" class="form-control">
+                        <option value="metros">Metros (m)</option>
+                        <option value="centimetros">CentÃ¡metros (cm)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">ObservaÃ§Ãµes</label>
+                    <textarea id="medicaoObs" class="form-control" rows="3" placeholder="CondiÃ§Ãµes encontradas, observaÃ§Ãµes tÃ©cnicas..."></textarea>
+                </div>
+                <div class="flex gap-2">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Salvar</button>
+                    <button type="button" class="btn btn-secondary" onclick="fecharModal('modalMedicao')">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Novo Local -->
+    <div id="modalLocal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-map-marker-alt"></i> Cadastrar Local</h3>
+                <button class="modal-close" onclick="fecharModal('modalLocal')">&times;</button>
+            </div>
+            <form id="formLocal">
+                <div class="form-group">
+                    <label class="form-label">Nome do Local</label>
+                    <input type="text" id="localNome" class="form-control" placeholder="Ex: Rio das Pedras" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Tipo</label>
+                    <select id="localTipo" class="form-control" required>
+                        <option value="">Selecione...</option>
+                        <option value="RIO">Rio</option>
+                        <option value="LAGOA">Lagoa</option>
+                        <option value="REPRESA">Represa</option>
+                        <option value="RESERVATORIO">ReservatÃ³rio</option>
+                    </select>
+                </div>
+                <div class="grid grid-2">
+                    <div class="form-group">
+                        <label class="form-label">MunicÃ¡pio</label>
+                        <input type="text" id="localMunicipio" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Estado</label>
+                        <input type="text" id="localEstado" class="form-control" maxlength="2" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">EndereÃ§o/LocalizaÃ§Ã£o</label>
+                    <input type="text" id="localEndereco" class="form-control" placeholder="Rua, bairro, ponto de referÃªncia...">
+                </div>
+                <div class="grid grid-2">
+                    <div class="form-group">
+                        <label class="form-label">Latitude</label>
+                        <input type="number" step="0.000001" id="localLat" class="form-control" placeholder="-23.550520">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Longitude</label>
+                        <input type="number" step="0.000001" id="localLng" class="form-control" placeholder="-46.633308">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Unidade de Medida</label>
+                    <select id="localUnidade" class="form-control">
+                        <option value="metros">Metros (m)</option>
+                        <option value="centimetros">CentÃ¡metros (cm)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Empresa ResponsÃ¡vel</label>
+                    <select id="localEmpresa" class="form-control">
+                        <option value="">Nenhuma</option>
+                        <option value="1">Companhia de Ãguas</option>
+                        <option value="2">Defesa Civil Municipal</option>
+                    </select>
+                </div>
+                <fieldset style="border: 2px solid var(--turquesa); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                    <legend style="font-weight: 700; color: var(--azul-petroleo);">NÃ¡veis de ReferÃªncia</legend>
+                    <div class="grid grid-2">
+                        <div class="form-group">
+                            <label class="form-label" style="font-size: 0.875rem;">NÃ¡vel MÃ¡ximo</label>
+                            <input type="number" step="0.01" id="localMaximo" class="form-control" placeholder="0.00">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" style="font-size: 0.875rem;">NÃ¡vel Normal</label>
+                            <input type="number" step="0.01" id="localNormal" class="form-control" placeholder="0.00">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" style="font-size: 0.875rem;">NÃ¡vel AtenÃ§Ã£o</label>
+                            <input type="number" step="0.01" id="localAtencao" class="form-control" placeholder="0.00">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" style="font-size: 0.875rem;">NÃ¡vel Alerta</label>
+                            <input type="number" step="0.01" id="localAlerta" class="form-control" placeholder="0.00">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" style="font-size: 0.875rem;">NÃ¡vel CrÃ¡tico</label>
+                            <input type="number" step="0.01" id="localCritico" class="form-control" placeholder="0.00">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" style="font-size: 0.875rem;">Transbordamento</label>
+                            <input type="number" step="0.01" id="localTransbordo" class="form-control" placeholder="0.00">
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="flex gap-2">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Cadastrar</button>
+                    <button type="button" class="btn btn-secondary" onclick="fecharModal('modalLocal')">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ============================================
+         JAVASCRIPT
+         ============================================ -->
+    <script>
+        // ============================================
+        // DADOS SIMULADOS (MOCK)
+        // ============================================
+
+        const usuarios = [
+            { email: 'admin@hidrosentinela.com', senha: 'admin123', nome: 'Administrador Principal', role: 'ADMIN_PRINCIPAL' },
+            { email: 'empresa@hidrosentinela.com', senha: 'empresa123', nome: 'Admin Empresa', role: 'ADMIN_EMPRESA' },
+            { email: 'func@hidrosentinela.com', senha: 'func123', nome: 'TÃ©cnico JoÃ£o', role: 'FUNCIONARIO' },
+            { email: 'cidadao@hidrosentinela.com', senha: 'cidadao123', nome: 'Maria CidadÃ£', role: 'USUARIO_COMUM' }
+        ];
+
+        let usuarioAtual = null;
+
+        const locais = [
+            {
+                id: 1,
+                nome: 'Rio das Pedras',
+                tipo: 'RIO',
+                municipio: 'SÃ£o Paulo',
+                estado: 'SP',
+                endereco: 'Ponte da Rua das Flores',
+                latitude: -23.550520,
+                longitude: -46.633308,
+                unidadeMedida: 'metros',
+                nivelMaximo: 5.0,
+                nivelNormal: 2.5,
+                nivelAtencao: 3.5,
+                nivelAlerta: 4.2,
+                nivelCritico: 4.8,
+                nivelTransbordamento: 5.5,
+                medicoes: [
+                    { data: '2026-08-17', hora: '08:00', nivel: 2.8 },
+                    { data: '2026-08-16', hora: '08:00', nivel: 2.6 },
+                    { data: '2026-08-15', hora: '08:00', nivel: 2.4 },
+                    { data: '2026-08-14', hora: '08:00', nivel: 2.3 },
+                    { data: '2026-08-13', hora: '08:00', nivel: 2.5 }
+                ]
+            },
+            {
+                id: 2,
+                nome: 'Lagoa Azul',
+                tipo: 'LAGOA',
+                municipio: 'Rio de Janeiro',
+                estado: 'RJ',
+                endereco: 'Parque Municipal',
+                latitude: -22.906847,
+                longitude: -43.172896,
+                unidadeMedida: 'metros',
+                nivelMaximo: 3.0,
+                nivelNormal: 1.5,
+                nivelAtencao: 2.2,
+                nivelAlerta: 2.6,
+                nivelCritico: 2.9,
+                nivelTransbordamento: 3.2,
+                medicoes: [
+                    { data: '2026-08-17', hora: '09:00', nivel: 1.6 },
+                    { data: '2026-08-16', hora: '09:00', nivel: 1.5 },
+                    { data: '2026-08-15', hora: '09:00', nivel: 1.4 },
+                    { data: '2026-08-14', hora: '09:00', nivel: 1.5 },
+                    { data: '2026-08-13', hora: '09:00', nivel: 1.6 }
+                ]
+            },
+            {
+                id: 3,
+                nome: 'Represa do Vale',
+                tipo: 'REPRESA',
+                municipio: 'Belo Horizonte',
+                estado: 'MG',
+                endereco: 'Rodovia BR-381, km 45',
+                latitude: -19.916681,
+                longitude: -43.934493,
+                unidadeMedida: 'metros',
+                nivelMaximo: 15.0,
+                nivelNormal: 10.0,
+                nivelAtencao: 12.5,
+                nivelAlerta: 13.8,
+                nivelCritico: 14.5,
+                nivelTransbordamento: 15.5,
+                medicoes: [
+                    { data: '2026-08-17', hora: '07:00', nivel: 13.9 },
+                    { data: '2026-08-16', hora: '07:00', nivel: 13.2 },
+                    { data: '2026-08-15', hora: '07:00', nivel: 12.8 },
+                    { data: '2026-08-14', hora: '07:00', nivel: 12.1 },
+                    { data: '2026-08-13', hora: '07:00', nivel: 11.5 }
+                ]
+            },
+            {
+                id: 4,
+                nome: 'ReservatÃ³rio Central',
+                tipo: 'RESERVATORIO',
+                municipio: 'Curitiba',
+                estado: 'PR',
+                endereco: 'Av. das Ãguas, 1000',
+                latitude: -25.428954,
+                longitude: -49.267137,
+                unidadeMedida: 'metros',
+                nivelMaximo: 8.0,
+                nivelNormal: 4.0,
+                nivelAtencao: 5.5,
+                nivelAlerta: 6.5,
+                nivelCritico: 7.5,
+                nivelTransbordamento: 8.5,
+                medicoes: [
+                    { data: '2026-08-17', hora: '06:00', nivel: 3.2 },
+                    { data: '2026-08-16', hora: '06:00', nivel: 3.5 },
+                    { data: '2026-08-15', hora: '06:00', nivel: 3.8 },
+                    { data: '2026-08-14', hora: '06:00', nivel: 4.0 },
+                    { data: '2026-08-13', hora: '06:00', nivel: 4.2 }
+                ]
+            },
+            {
+                id: 5,
+                nome: 'Rio Verde',
+                tipo: 'RIO',
+                municipio: 'Porto Alegre',
+                estado: 'RS',
+                endereco: 'Ponte do Centro',
+                latitude: -30.034647,
+                longitude: -51.217658,
+                unidadeMedida: 'metros',
+                nivelMaximo: 6.0,
+                nivelNormal: 3.0,
+                nivelAtencao: 4.5,
+                nivelAlerta: 5.2,
+                nivelCritico: 5.7,
+                nivelTransbordamento: 6.5,
+                medicoes: [
+                    { data: '2026-08-17', hora: '10:00', nivel: 4.8 },
+                    { data: '2026-08-16', hora: '10:00', nivel: 4.3 },
+                    { data: '2026-08-15', hora: '10:00', nivel: 3.9 },
+                    { data: '2026-08-14', hora: '10:00', nivel: 3.5 },
+                    { data: '2026-08-13', hora: '10:00', nivel: 3.2 }
+                ]
+            }
+        ];
+
+        const alertas = [
+            {
+                id: 1,
+                tipo: 'NIVEL_ALERTA',
+                gravidade: 'ALTA',
+                local: 'Represa do Vale',
+                nivel: 13.9,
+                limite: 13.8,
+                data: '2026-08-17 07:15',
+                status: 'ABERTO'
+            },
+            {
+                id: 2,
+                tipo: 'SUBIDA_RAPIDA',
+                gravidade: 'MEDIA',
+                local: 'Rio Verde',
+                nivel: 4.8,
+                limite: 4.5,
+                data: '2026-08-17 10:30',
+                status: 'VISUALIZADO'
+            },
+            {
+                id: 3,
+                tipo: 'NIVEL_ATENCAO',
+                gravidade: 'BAIXA',
+                local: 'Rio das Pedras',
+                nivel: 2.8,
+                limite: 2.5,
+                data: '2026-08-17 08:20',
+                status: 'RESOLVIDO'
+            }
+        ];
+
+        // ============================================
+        // FUNÃ§ÃµES DE AUTENTICAÃ§Ã£o
+        // ============================================
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const senha = document.getElementById('loginSenha').value;
+
+            const usuario = usuarios.find(u => u.email === email && u.senha === senha);
+
+            if (usuario) {
+                usuarioAtual = usuario;
+                document.getElementById('loginScreen').classList.add('hidden');
+                document.getElementById('mainSystem').classList.remove('hidden');
+                atualizarInfoUsuario();
+                navegarPara('dashboard');
+            } else {
+                alert('E-mail ou senha invÃ¡lidos!');
+            }
+        });
+
+        function logout() {
+            usuarioAtual = null;
+            document.getElementById('mainSystem').classList.add('hidden');
+            document.getElementById('loginScreen').classList.remove('hidden');
+            document.getElementById('loginForm').reset();
+        }
+
+        function atualizarInfoUsuario() {
+            if (!usuarioAtual) return;
+
+            document.getElementById('userName').textContent = usuarioAtual.nome;
+            document.getElementById('userAvatar').textContent = usuarioAtual.nome.charAt(0);
+
+            const roles = {
+                'ADMIN_PRINCIPAL': 'Administrador Principal',
+                'ADMIN_EMPRESA': 'Admin Empresa',
+                'FUNCIONARIO': 'FuncionÃ¡rio',
+                'USUARIO_COMUM': 'CidadÃ£o'
+            };
+
+            document.getElementById('userRole').textContent = roles[usuarioAtual.role];
+
+            // Ajustar menu conforme perfil
+            const menuAdmin = document.getElementById('menuAdmin');
+            if (usuarioAtual.role === 'USUARIO_COMUM') {
+                menuAdmin.classList.add('hidden');
+            } else {
+                menuAdmin.classList.remove('hidden');
+            }
+        }
+
+        // ============================================
+        // NAVEGAÃ§Ã£o
+        // ============================================
+
+        function navegarPara(tela) {
+            // Atualizar menu ativo
+            document.querySelectorAll('.nav-menu a').forEach(a => a.classList.remove('active'));
+            event?.target?.closest('a')?.classList.add('active');
+
+            const content = document.getElementById('mainContent');
+
+            switch(tela) {
+                case 'dashboard':
+                    renderizarDashboard(content);
+                    break;
+                case 'locais':
+                    renderizarLocais(content);
+                    break;
+                case 'medicoes':
+                    renderizarMedicoes(content);
+                    break;
+                case 'alertas':
+                    renderizarAlertas(content);
+                    break;
+                case 'relatorios':
+                    renderizarRelatorios(content);
+                    break;
+                case 'admin':
+                    renderizarAdmin(content);
+                    break;
+            }
+        }
+
+        // ============================================
+        // CLASSIFICAÃ§Ã£o DE NÃ¡VEIS
+        // ============================================
+
+        function classificarNivel(local, nivelMedido) {
+            if (nivelMedido >= local.nivelTransbordamento) {
+                return { classe: 'CRITICO', label: 'Transbordamento', cor: '#9D0208' };
+            } else if (nivelMedido >= local.nivelCritico) {
+                return { classe: 'CRITICO', label: 'CrÃ¡tico', cor: '#D62828' };
+            } else if (nivelMedido >= local.nivelAlerta) {
+                return { classe: 'ALERTA', label: 'Alerta', cor: '#FB8500' };
+            } else if (nivelMedido >= local.nivelAtencao) {
+                return { classe: 'ATENCAO', label: 'AtenÃ§Ã£o', cor: '#FFD166' };
+            } else if (nivelMedido <= local.nivelNormal * 0.5) {
+                return { classe: 'MUITO_BAIXO', label: 'Muito Baixo', cor: '#6A4C93' };
+            } else {
+                return { classe: 'NORMAL', label: 'Normal', cor: '#0077B6' };
+            }
+        }
+
+        function calcularTendencia(medicoes) {
+            if (medicoes.length < 2) return 'ESTAVEL';
+
+            const ultima = medicoes[0].nivel;
+            const anterior = medicoes[1].nivel;
+            const variacao = ultima - anterior;
+
+            if (variacao > 0.5) return 'SUBINDO_RAPIDO';
+            if (variacao > 0) return 'SUBINDO';
+            if (variacao < -0.5) return 'DESCENDO_RAPIDO';
+            if (variacao < 0) return 'DESCENDO';
+            return 'ESTAVEL';
+        }
+
+        // ============================================
+        // RENDERIZAÃ§Ã£o DAS TELAS
+        // ============================================
+
+        function renderizarDashboard(container) {
+            // Contadores
+            const totalLocais = locais.length;
+            let normais = 0, atencao = 0, alerta = 0, critico = 0;
+
+            locais.forEach(local => {
+                const ultimaMedicao = local.medicoes[0];
+                if (ultimaMedicao) {
+                    const classificacao = classificarNivel(local, ultimaMedicao.nivel);
+                    if (classificacao.classe === 'NORMAL') normais++;
+                    else if (classificacao.classe === 'ATENCAO') atencao++;
+                    else if (classificacao.classe === 'ALERTA') alerta++;
+                    else critico++;
+                }
+            });
+
+            container.innerHTML = `
+                <div class="fade-in">
+                    <h2 style="margin-bottom: 1.5rem; color: var(--azul-petroleo);">
+                        <i class="fas fa-chart-line"></i> Dashboard
+                    </h2>
+
+                    <!-- EstatÃ¡sticas -->
+                    <div class="dashboard-stats">
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: var(--azul-petroleo); color: white;">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>${totalLocais}</h3>
+                                <p>Locais Monitorados</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: #0077B6; color: white;">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>${normais}</h3>
+                                <p>SituaÃ§Ã£o Normal</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: #FFD166; color: black;">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>${atencao}</h3>
+                                <p>Em AtenÃ§Ã£o</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: #FB8500; color: white;">
+                                <i class="fas fa-bell"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>${alerta}</h3>
+                                <p>Em Alerta</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: #D62828; color: white;">
+                                <i class="fas fa-exclamation-circle"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>${critico}</h3>
+                                <p>SituaÃ§Ã£o CrÃ¡tica</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- GrÃ¡ficos e Mapa -->
+                    <div class="grid grid-2 mb-3">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">EvoluÃ§Ã£o dos NÃ¡veis (7 dias)</h3>
+                            </div>
+                            <canvas id="graficoEvolucao" height="200"></canvas>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Mapa de Locais</h3>
+                            </div>
+                            <div class="mapa-container">
+                                <div>
+                                    <i class="fas fa-map-marked-alt" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                                    <p>Mapa interativo com os pontos monitorados</p>
+                                    <p style="font-size: 0.875rem; margin-top: 0.5rem;">(IntegraÃ§Ã£o com Leaflet/Google Maps)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ãšltimas MediÃ§Ãµes -->
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h3 class="card-title">Ãºltimas MediÃ§Ãµes</h3>
+                            <button class="btn btn-sm btn-primary" onclick="abrirModal('modalMedicao')">
+                                <i class="fas fa-plus"></i> Nova Medicao
+                            </button>
+                        </div>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Local</th>
+                                    <th>Data/Hora</th>
+                                    <th>NÃ¡vel</th>
+                                    <th>Status</th>
+                                    <th>TendÃªncia</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${locais.map(local => {
+                                    const ultima = local.medicoes[0];
+                                    const classificacao = classificarNivel(local, ultima.nivel);
+                                    const tendencia = calcularTendencia(local.medicoes);
+                                    const iconTendencia = {
+                                        'SUBINDO_RAPIDO': '↗â¬´',
+                                        'SUBINDO': '↗',
+                                        'ESTAVEL': 'â¬»',
+                                        'DESCENDO': '↘',
+                                        'DESCENDO_RAPIDO': '↘â¬»'
+                                    }[tendencia];
+
+                                    return `
+                                        <tr>
+                                            <td><strong>${local.nome}</strong><br><small>${local.municipio}/${local.estado}</small></td>
+                                            <td>${ultima.data} Ã s ${ultima.hora}</td>
+                                            <td><strong>${ultima.nivel.toFixed(2)} ${local.unidadeMedida}</strong></td>
+                                            <td><span class="badge" style="background: ${classificacao.cor}; color: white;">${classificacao.label}</span></td>
+                                            <td>${iconTendencia}</td>
+                                        </tr>
+                                    `;
+                                }).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Alertas Recentes -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Alertas Recentes</h3>
+                        </div>
+                        ${alertas.map(alerta => {
+                            const classeAlerta = alerta.gravidade === 'CRITICA' ? 'alerta-critico' : 
+                                               alerta.gravidade === 'ALTA' ? 'alerta-alerta' : 'alerta-atencao';
+                            return `
+                                <div class="alerta-item ${classeAlerta}">
+                                    <div class="alerta-header">
+                                        <span class="alerta-titulo">
+                                            <i class="fas fa-bell"></i> ${alerta.tipo.replace('_', ' ')}
+                                        </span>
+                                        <span class="badge" style="background: ${alerta.gravidade === 'CRITICA' ? '#D62828' : alerta.gravidade === 'ALTA' ? '#FB8500' : '#FFD166'}; color: white;">
+                                            ${alerta.gravidade}
+                                        </span>
+                                    </div>
+                                    <div class="alerta-local">
+                                        <strong>${alerta.local}</strong> - NÃ¡vel: ${alerta.nivel}m | Limite: ${alerta.limite}m<br>
+                                        <small>${alerta.data}</small>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+
+            // Renderizar grÃ¡fico
+            setTimeout(() => {
+                const ctx = document.getElementById('graficoEvolucao');
+                if (ctx) {
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: ['13/08', '14/08', '15/08', '16/08', '17/08'],
+                            datasets: locais.slice(0, 3).map((local, i) => ({
+                                label: local.nome,
+                                data: local.medicoes.slice(0, 5).reverse().map(m => m.nivel),
+                                borderColor: ['#0077B6', '#00B4D8', '#90E0EF'][i],
+                                backgroundColor: 'transparent',
+                                tension: 0.4
+                            }))
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    position: 'top'
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: false
+                                }
+                            }
+                        }
+                    });
+                }
+            }, 100);
+        }
+
+        function renderizarLocais(container) {
+            container.innerHTML = `
+                <div class="fade-in">
+                    <div class="flex flex-between flex-center mb-3">
+                        <h2 style="color: var(--azul-petroleo);">
+                            <i class="fas fa-map-marker-alt"></i> Locais Monitorados
+                        </h2>
+                        ${usuarioAtual.role !== 'USUARIO_COMUM' ? `
+                            <button class="btn btn-primary" onclick="abrirModal('modalLocal')">
+                                <i class="fas fa-plus"></i> Novo Local
+                            </button>
+                        ` : ''}
+                    </div>
+
+                    <div class="grid grid-3">
+                        ${locais.map(local => {
+                            const ultima = local.medicoes[0];
+                            const classificacao = classificarNivel(local, ultima.nivel);
+                            const tendencia = calcularTendencia(local.medicoes);
+
+                            return `
+                                <div class="card card-status" style="border-left: 5px solid ${classificacao.cor};">
+                                    <i class="fas ${local.tipo === 'RIO' ? 'fa-water' : local.tipo === 'LAGOA' ? 'fa-swimming-pool' : 'fa-warehouse'} card-status-icon" style="color: ${classificacao.cor};"></i>
+                                    <h3 style="margin-bottom: 0.5rem;">${local.nome}</h3>
+                                    <p style="color: var(--cinza-escuro); margin-bottom: 1rem;">${local.municipio}/${local.estado}</p>
+                                    <div class="card-status-number" style="color: ${classificacao.cor};">
+                                        ${ultima.nivel.toFixed(2)} ${local.unidadeMedida}
+                                    </div>
+                                    <div class="card-status-label" style="color: ${classificacao.cor};">
+                                        ${classificacao.label}
+                                    </div>
+                                    <div style="margin-top: 1rem; font-size: 0.875rem;">
+                                        <strong>TendÃªncia:</strong> ${tendencia.replace('_', ' ')}<br>
+                                        <small>Ãºltima: ${ultima.data} Ã s ${ultima.hora}</small>
+                                    </div>
+                                    <button class="btn btn-sm btn-secondary mt-2" onclick="verDetalhesLocal(${local.id})">
+                                        <i class="fas fa-eye"></i> Ver Detalhes
+                                    </button>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderizarMedicoes(container) {
+            container.innerHTML = `
+                <div class="fade-in">
+                    <div class="flex flex-between flex-center mb-3">
+                        <h2 style="color: var(--azul-petroleo);">
+                            <i class="fas fa-ruler-vertical"></i> MediÃ§Ãµes
+                        </h2>
+                        <button class="btn btn-primary" onclick="abrirModal('modalMedicao')">
+                            <i class="fas fa-plus"></i> Nova Medicao
+                        </button>
+                    </div>
+
+                    <div class="card">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Local</th>
+                                    <th>Data/Hora</th>
+                                    <th>NÃ¡vel</th>
+                                    <th>Unidade</th>
+                                    <th>Status</th>
+                                    <th>ObservaÃ§Ãµes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${locais.flatMap(local => 
+                                    local.medicoes.map(medicao => {
+                                        const classificacao = classificarNivel(local, medicao.nivel);
+                                        return `
+                                            <tr>
+                                                <td><strong>${local.nome}</strong></td>
+                                                <td>${medicao.data} Ã s ${medicao.hora}</td>
+                                                <td><strong>${medicao.nivel.toFixed(2)}</strong></td>
+                                                <td>${local.unidadeMedida}</td>
+                                                <td>
+                                                    <span class="badge" style="background: ${classificacao.cor}; color: white;">
+                                                        ${classificacao.label}
+                                                    </span>
+                                                </td>
+                                                <td><small>Medicao automÃ¡tica</small></td>
+                                            </tr>
+                                        `;
+                                    })
+                                ).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderizarAlertas(container) {
+            container.innerHTML = `
+                <div class="fade-in">
+                    <h2 style="margin-bottom: 1.5rem; color: var(--azul-petroleo);">
+                        <i class="fas fa-bell"></i> Central de Alertas
+                    </h2>
+
+                    <div class="grid grid-2">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Alertas Ativos</h3>
+                            </div>
+                            ${alertas.map(alerta => {
+                                const classeAlerta = alerta.gravidade === 'CRITICA' ? 'alerta-critico' : 
+                                                   alerta.gravidade === 'ALTA' ? 'alerta-alerta' : 'alerta-atencao';
+                                return `
+                                    <div class="alerta-item ${classeAlerta}">
+                                        <div class="alerta-header">
+                                            <span class="alerta-titulo">
+                                                <i class="fas fa-bell"></i> ${alerta.tipo.replace('_', ' ')}
+                                            </span>
+                                            <span class="badge" style="background: ${alerta.gravidade === 'CRITICA' ? '#D62828' : alerta.gravidade === 'ALTA' ? '#FB8500' : '#FFD166'}; color: white;">
+                                                ${alerta.gravidade}
+                                            </span>
+                                        </div>
+                                        <div class="alerta-local">
+                                            <strong>${alerta.local}</strong> - NÃ¡vel: ${alerta.nivel}m<br>
+                                            Limite ultrapassado: ${alerta.limite}m<br>
+                                            <small>${alerta.data}</small><br>
+                                            <small>Status: ${alerta.status}</small>
+                                        </div>
+                                        <div style="margin-top: 0.5rem;">
+                                            <button class="btn btn-sm btn-primary"><i class="fas fa-check"></i> Visualizar</button>
+                                            <button class="btn btn-sm btn-secondary"><i class="fas fa-tools"></i> Em Atendimento</button>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Configurar Alertas</h3>
+                            </div>
+                            <form>
+                                <div class="form-group">
+                                    <label class="form-label">E-mail para NotificaÃ§Ãµes</label>
+                                    <input type="email" class="form-control" value="${usuarioAtual.email}">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Telefone (WhatsApp/SMS)</label>
+                                    <input type="tel" class="form-control" placeholder="(00) 00000-0000">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Tipos de Alerta</label>
+                                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                        <label><input type="checkbox" checked> NÃ¡vel de AtenÃ§Ã£o</label>
+                                        <label><input type="checkbox" checked> NÃ¡vel de Alerta</label>
+                                        <label><input type="checkbox" checked> SituaÃ§Ã£o CrÃ¡tica</label>
+                                        <label><input type="checkbox" checked> Subida RÃ¡pida</label>
+                                        <label><input type="checkbox"> Medicao Atrasada</label>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Salvar ConfiguraÃ§Ãµes
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderizarRelatorios(container) {
+            container.innerHTML = `
+                <div class="fade-in">
+                    <div class="flex flex-between flex-center mb-3">
+                        <h2 style="color: var(--azul-petroleo);">
+                            <i class="fas fa-file-alt"></i> RelatÃ³rios
+                        </h2>
+                        <button class="btn btn-primary" onclick="gerarRelatorio()">
+                            <i class="fas fa-plus"></i> Gerar RelatÃ³rio
+                        </button>
+                    </div>
+
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h3 class="card-title">RelatÃ³rios Gerados</h3>
+                        </div>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>CÃ³digo</th>
+                                    <th>Local</th>
+                                    <th>PerÃ¡odo</th>
+                                    <th>Data Geracao</th>
+                                    <th>Gerado Por</th>
+                                    <th>AÃ§Ãµes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>REL-2026-001</strong></td>
+                                    <td>Rio das Pedras</td>
+                                    <td>01/08/2026 - 17/08/2026</td>
+                                    <td>17/08/2026 14:30</td>
+                                    <td>${usuarioAtual.nome}</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary"><i class="fas fa-file-pdf"></i> PDF</button>
+                                        <button class="btn btn-sm btn-secondary"><i class="fas fa-file-word"></i> Word</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>REL-2026-002</strong></td>
+                                    <td>Represa do Vale</td>
+                                    <td>01/08/2026 - 17/08/2026</td>
+                                    <td>17/08/2026 14:25</td>
+                                    <td>${usuarioAtual.nome}</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary"><i class="fas fa-file-pdf"></i> PDF</button>
+                                        <button class="btn btn-sm btn-secondary"><i class="fas fa-file-word"></i> Word</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">RelatÃ³rios AutomÃ¡ticos</h3>
+                        </div>
+                        <p>Os relatÃ³rios automÃ¡ticos sÃ£o gerados a cada 2 dias e enviados por e-mail para os responsÃ¡veis.</p>
+                        <div style="margin-top: 1rem;">
+                            <label><input type="checkbox" checked> Ativar relatÃ³rios automÃ¡ticos</label><br>
+                            <label><input type="checkbox" checked> Enviar por e-mail</label><br>
+                            <label><input type="checkbox"> Disponibilizar no sistema</label>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderizarAdmin(container) {
+            if (usuarioAtual.role === 'USUARIO_COMUM') {
+                container.innerHTML = '<div class="card"><p>Acesso restrito a administradores.</p></div>';
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="fade-in">
+                    <h2 style="margin-bottom: 1.5rem; color: var(--azul-petroleo);">
+                        <i class="fas fa-cog"></i> AdministraÃ§Ã£o do Sistema
+                    </h2>
+
+                    <div class="grid grid-3 mb-3">
+                        <div class="card">
+                            <h3><i class="fas fa-users"></i> UsuÃ¡rios</h3>
+                            <p style="color: var(--cinza-escuro); margin: 1rem 0;">Gerencie usuÃ¡rios, perfis e permissÃµes</p>
+                            <button class="btn btn-primary btn-sm"><i class="fas fa-list"></i> Gerenciar</button>
+                        </div>
+                        <div class="card">
+                            <h3><i class="fas fa-building"></i> Empresas</h3>
+                            <p style="color: var(--cinza-escuro); margin: 1rem 0;">Cadastre empresas e organizaÃ§Ãµes</p>
+                            <button class="btn btn-primary btn-sm"><i class="fas fa-list"></i> Gerenciar</button>
+                        </div>
+                        <div class="card">
+                            <h3><i class="fas fa-file-import"></i> Importar Dados</h3>
+                            <p style="color: var(--cinza-escuro); margin: 1rem 0;">Importe planilhas Excel/CSV</p>
+                            <button class="btn btn-primary btn-sm"><i class="fas fa-upload"></i> Importar</button>
+                        </div>
+                        <div class="card">
+                            <h3><i class="fas fa-history"></i> Auditoria</h3>
+                            <p style="color: var(--cinza-escuro); margin: 1rem 0;">Consulte logs de alteraÃ§Ãµes</p>
+                            <button class="btn btn-primary btn-sm"><i class="fas fa-list"></i> Ver Logs</button>
+                        </div>
+                        <div class="card">
+                            <h3><i class="fas fa-bell"></i> Configurar Alertas</h3>
+                            <p style="color: var(--cinza-escuro); margin: 1rem 0;">Defina limites e destinatÃ¡rios</p>
+                            <button class="btn btn-primary btn-sm"><i class="fas fa-cog"></i> Configurar</button>
+                        </div>
+                        <div class="card">
+                            <h3><i class="fas fa-database"></i> Backup</h3>
+                            <p style="color: var(--cinza-escuro); margin: 1rem 0;">FaÃ§a backup do banco de dados</p>
+                            <button class="btn btn-primary btn-sm"><i class="fas fa-download"></i> Exportar</button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Logs de Auditoria Recentes</h3>
+                        </div>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Data/Hora</th>
+                                    <th>UsuÃ¡rio</th>
+                                    <th>AÃ§Ã£o</th>
+                                    <th>Entidade</th>
+                                    <th>Detalhes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>17/08/2026 14:30:15</td>
+                                    <td>${usuarioAtual.nome}</td>
+                                    <td>CREATE</td>
+                                    <td>RelatÃ³rio</td>
+                                    <td>REL-2026-001</td>
+                                </tr>
+                                <tr>
+                                    <td>17/08/2026 14:25:42</td>
+                                    <td>${usuarioAtual.nome}</td>
+                                    <td>CREATE</td>
+                                    <td>RelatÃ³rio</td>
+                                    <td>REL-2026-002</td>
+                                </tr>
+                                <tr>
+                                    <td>17/08/2026 10:15:30</td>
+                                    <td>TÃ©cnico JoÃ£o</td>
+                                    <td>CREATE</td>
+                                    <td>Medicao</td>
+                                    <td>Rio Verde - 4.8m</td>
+                                </tr>
+                                <tr>
+                                    <td>17/08/2026 08:20:10</td>
+                                    <td>TÃ©cnico JoÃ£o</td>
+                                    <td>CREATE</td>
+                                    <td>Medicao</td>
+                                    <td>Rio das Pedras - 2.8m</td>
+                                </tr>
+                                <tr>
+                                    <td>17/08/2026 07:15:05</td>
+                                    <td>Sistema</td>
+                                    <td>ALERTA</td>
+                                    <td>Alerta</td>
+                                    <td>Represa do Vale - NÃ¡vel Alerta</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ============================================
+        // MODAIS
+        // ============================================
+
+        function abrirModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+
+            if (modalId === 'modalMedicao') {
+                // Preencher select de locais
+                const select = document.getElementById('medicaoLocal');
+                select.innerHTML = '<option value="">Selecione um local...</option>';
+                locais.forEach(local => {
+                    select.innerHTML += `<option value="${local.id}">${local.nome} - ${local.municipio}/${local.estado}</option>`;
+                });
+
+                // Set data/hora atual
+                document.getElementById('medicaoData').valueAsDate = new Date();
+                document.getElementById('medicaoHora').value = new Date().toTimeString().substring(0, 5);
+            }
+        }
+
+        function fecharModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // ============================================
+        // FORMULÃ¡RIOS
+        // ============================================
+
+        document.getElementById('formMedicao').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const localId = parseInt(document.getElementById('medicaoLocal').value);
+            const data = document.getElementById('medicaoData').value;
+            const hora = document.getElementById('medicaoHora').value;
+            const nivel = parseFloat(document.getElementById('medicaoNivel').value);
+            const unidade = document.getElementById('medicaoUnidade').value;
+            const obs = document.getElementById('medicaoObs').value;
+
+            const local = locais.find(l => l.id === localId);
+            if (local) {
+                local.medicoes.unshift({ data, hora, nivel, observacao: obs });
+                alert('Medicao registrada com sucesso!');
+                fecharModal('modalMedicao');
+                navegarPara('medicoes');
+            }
+        });
+
+        document.getElementById('formLocal').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const novoLocal = {
+                id: locais.length + 1,
+                nome: document.getElementById('localNome').value,
+                tipo: document.getElementById('localTipo').value,
+                municipio: document.getElementById('localMunicipio').value,
+                estado: document.getElementById('localEstado').value,
+                endereco: document.getElementById('localEndereco').value,
+                latitude: parseFloat(document.getElementById('localLat').value) || 0,
+                longitude: parseFloat(document.getElementById('localLng').value) || 0,
+                unidadeMedida: document.getElementById('localUnidade').value,
+                nivelMaximo: parseFloat(document.getElementById('localMaximo').value) || 0,
+                nivelNormal: parseFloat(document.getElementById('localNormal').value) || 0,
+                nivelAtencao: parseFloat(document.getElementById('localAtencao').value) || 0,
+                nivelAlerta: parseFloat(document.getElementById('localAlerta').value) || 0,
+                nivelCritico: parseFloat(document.getElementById('localCritico').value) || 0,
+                nivelTransbordamento: parseFloat(document.getElementById('localTransbordo').value) || 0,
+                medicoes: []
+            };
+
+            locais.push(novoLocal);
+            alert('Local cadastrado com sucesso!');
+            fecharModal('modalLocal');
+            navegarPara('locais');
+        });
+
+        // ============================================
+        // FUNÃ§ÃµES AUXILIARES
+        // ============================================
+
+        function verDetalhesLocal(id) {
+            alert('Funcionalidade: Detalhes completos do local com grÃ¡fico histÃ³rico, mapa, alertas e relatÃ³rios.');
+        }
+
+        function gerarRelatorio() {
+            alert('Gerando relatÃ³rio em PDF e Word...\n\nRelatÃ³rio serÃ¡ disponÃ¡vel para download em instantes.');
+        }
+
+        // ============================================
+        // INICIALIZAÃ§Ã£o
+        // ============================================
+
+        console.log('HidroSentinela - Sistema de Monitoramento de NÃ¡veis de Ãgua');
+        console.log('VersÃ£o: 1.0.0 (ProtÃ³tipo)');
+        console.log('Dados simulados para demonstracao.');
+    </script>
+</body>
+</html>
