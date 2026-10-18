@@ -1,0 +1,571 @@
+{
+  "center": [
+    -20.3315,
+    -40.3455
+  ],
+  "zoom": 15,
+  "points": [
+    {
+      "id": "p1",
+      "name": "Terminal São Torquato",
+      "kind": "point",
+      "lat": -20.33013,
+      "lng": -40.35299,
+      "description": "Ponto real de referência geográfica utilizado apenas para posicionamento no protótipo."
+    },
+    {
+      "id": "p2",
+      "name": "HESVV - Hospital Estadual de Vila Velha",
+      "kind": "point",
+      "lat": -20.32941,
+      "lng": -40.350823,
+      "description": "Ponto real de referência na Avenida Anésio José Simões."
+    },
+    {
+      "id": "p3",
+      "name": "UMEF Graciano Neves",
+      "kind": "point",
+      "lat": -20.32953,
+      "lng": -40.33736,
+      "description": "Ponto real de referência no bairro Paul."
+    },
+    {
+      "id": "p4",
+      "name": "Referência — Avenida Graça Aranha",
+      "kind": "point",
+      "lat": -20.3351,
+      "lng": -40.3478,
+      "description": "Localização de referência de uma via real de São Torquato; dado operacional fictício para demonstração."
+    },
+    {
+      "id": "p5",
+      "name": "Referência — Avenida Estação",
+      "kind": "point",
+      "lat": -20.3325,
+      "lng": -40.3488,
+      "description": "Localização de referência de uma via real de São Torquato; dado operacional fictício para demonstração."
+    },
+    {
+      "id": "p6",
+      "name": "Referência — Avenida Leopoldina",
+      "kind": "point",
+      "lat": -20.3338,
+      "lng": -40.3447,
+      "description": "Localização de referência de uma via real de São Torquato; dado operacional fictício para demonstração."
+    },
+    {
+      "id": "p7",
+      "name": "Referência — Rua Central",
+      "kind": "point",
+      "lat": -20.336,
+      "lng": -40.353,
+      "description": "Localização de referência de uma via real de São Torquato; dado operacional fictício para demonstração."
+    }
+  ],
+  "stations": [
+    {
+      "id": "s1",
+      "name": "Estação São Torquato",
+      "level": 3.2,
+      "variation": 0.4,
+      "trend": "up",
+      "status": "alert",
+      "updatedAt": "10:24",
+      "lat": -20.3302,
+      "lng": -40.3523
+    },
+    {
+      "id": "s2",
+      "name": "Estação Paul",
+      "level": 2.4,
+      "variation": 0.2,
+      "trend": "up",
+      "status": "attention",
+      "updatedAt": "10:08",
+      "lat": -20.33316,
+      "lng": -40.33604
+    },
+    {
+      "id": "s3",
+      "name": "Estação Graça Aranha",
+      "level": 2.8,
+      "variation": 0.3,
+      "trend": "up",
+      "status": "alert",
+      "updatedAt": "10:18",
+      "lat": -20.3351,
+      "lng": -40.3478
+    },
+    {
+      "id": "s4",
+      "name": "Estação Avenida Estação",
+      "level": 2.1,
+      "variation": 0.1,
+      "trend": "stable",
+      "status": "attention",
+      "updatedAt": "10:14",
+      "lat": -20.3325,
+      "lng": -40.3488
+    },
+    {
+      "id": "s5",
+      "name": "Estação Leopoldina",
+      "level": 1.7,
+      "variation": -0.1,
+      "trend": "down",
+      "status": "normal",
+      "updatedAt": "10:05",
+      "lat": -20.3338,
+      "lng": -40.3447
+    }
+  ],
+  "floodPoints": [
+    {
+      "id": "fp1",
+      "name": "Ponto amostral — Avenida Anésio José Simões",
+      "severity": "critical",
+      "intensity": 92,
+      "lat": -20.32941,
+      "lng": -40.350823,
+      "description": "Amostra fictícia associada a um local real da via para demonstração."
+    },
+    {
+      "id": "fp2",
+      "name": "Ponto amostral — Avenida Senador Robert Kennedy",
+      "severity": "alert",
+      "intensity": 76,
+      "lat": -20.3312,
+      "lng": -40.3538,
+      "description": "Amostra fictícia associada a um local real da via para demonstração."
+    },
+    {
+      "id": "fp3",
+      "name": "Ponto amostral — Avenida Jerônimo Monteiro",
+      "severity": "attention",
+      "intensity": 54,
+      "lat": -20.34079,
+      "lng": -40.32729,
+      "description": "Amostra fictícia associada a um local real da via para demonstração."
+    },
+    {
+      "id": "fp7",
+      "name": "Ponto amostral ST-04",
+      "severity": "alert",
+      "intensity": 71,
+      "lat": -20.33485,
+      "lng": -40.34762,
+      "description": "Ponto pontual demonstrativo próximo a uma via real de São Torquato."
+    },
+    {
+      "id": "fp8",
+      "name": "Ponto amostral ST-05",
+      "severity": "attention",
+      "intensity": 49,
+      "lat": -20.33375,
+      "lng": -40.34655,
+      "description": "Ponto pontual demonstrativo de atenção."
+    },
+    {
+      "id": "fp9",
+      "name": "Ponto amostral ST-06",
+      "severity": "critical",
+      "intensity": 91,
+      "lat": -20.33255,
+      "lng": -40.34905,
+      "description": "Ponto pontual demonstrativo de maior intensidade."
+    },
+    {
+      "id": "fp10",
+      "name": "Ponto amostral ST-07",
+      "severity": "alert",
+      "intensity": 67,
+      "lat": -20.33635,
+      "lng": -40.3531,
+      "description": "Ponto pontual demonstrativo na área de monitoramento."
+    },
+    {
+      "id": "fp11",
+      "name": "Ponto amostral PA-04",
+      "severity": "critical",
+      "intensity": 86,
+      "lat": -20.33495,
+      "lng": -40.33715,
+      "description": "Ponto pontual demonstrativo na transição de Paul."
+    },
+    {
+      "id": "fp12",
+      "name": "Ponto amostral PA-05",
+      "severity": "alert",
+      "intensity": 69,
+      "lat": -20.3361,
+      "lng": -40.33825,
+      "description": "Ponto pontual demonstrativo de possível acúmulo de água."
+    },
+    {
+      "id": "fp13",
+      "name": "Ponto amostral PA-06",
+      "severity": "attention",
+      "intensity": 45,
+      "lat": -20.33735,
+      "lng": -40.33935,
+      "description": "Ponto pontual demonstrativo de atenção."
+    },
+    {
+      "id": "fp14",
+      "name": "Ponto amostral PA-07",
+      "severity": "normal",
+      "intensity": 18,
+      "lat": -20.33195,
+      "lng": -40.3402,
+      "description": "Ponto pontual demonstrativo em condição normal."
+    }
+  ],
+  "susceptibilityAreas": [
+    {
+      "id": "sa1",
+      "name": "Microzona propensa — São Torquato",
+      "severity": "critical",
+      "lat": -20.32941,
+      "lng": -40.350823,
+      "radius": 90,
+      "description": "Zona de suscetibilidade simulada para a demonstração. O local de referência é real."
+    },
+    {
+      "id": "sa2",
+      "name": "Microzona propensa — Avenida Senador Robert Kennedy",
+      "severity": "alert",
+      "lat": -20.32766,
+      "lng": -40.352631,
+      "radius": 80,
+      "description": "Zona de suscetibilidade simulada para a demonstração. O local de referência é real."
+    },
+    {
+      "id": "sa3",
+      "name": "Microzona propensa — Paul",
+      "severity": "attention",
+      "lat": -20.33316,
+      "lng": -40.33604,
+      "radius": 85,
+      "description": "Zona de suscetibilidade simulada para a demonstração. O local de referência é real."
+    },
+    {
+      "id": "sa5",
+      "name": "Microzona propensa ST-C",
+      "severity": "alert",
+      "lat": -20.33475,
+      "lng": -40.34755,
+      "radius": 120,
+      "description": "Microzona pequena e demonstrativa de suscetibilidade."
+    },
+    {
+      "id": "sa6",
+      "name": "Microzona propensa ST-D",
+      "severity": "attention",
+      "lat": -20.3337,
+      "lng": -40.34655,
+      "radius": 105,
+      "description": "Microzona pequena e demonstrativa de suscetibilidade."
+    },
+    {
+      "id": "sa7",
+      "name": "Microzona propensa PA-C",
+      "severity": "critical",
+      "lat": -20.33505,
+      "lng": -40.33725,
+      "radius": 135,
+      "description": "Microzona pequena e demonstrativa de suscetibilidade em Paul."
+    },
+    {
+      "id": "sa8",
+      "name": "Microzona propensa PA-D",
+      "severity": "alert",
+      "lat": -20.3362,
+      "lng": -40.33835,
+      "radius": 115,
+      "description": "Microzona pequena e demonstrativa de suscetibilidade em Paul."
+    }
+  ],
+  "riskPolygons": [
+    {
+      "id": "poly5",
+      "name": "Microzona propensa — São Torquato C",
+      "severity": "alert",
+      "positions": [
+        [
+          -20.33505,
+          -40.348
+        ],
+        [
+          -20.3346,
+          -40.34775
+        ],
+        [
+          -20.33445,
+          -40.34725
+        ],
+        [
+          -20.33495,
+          -40.34715
+        ]
+      ]
+    },
+    {
+      "id": "poly6",
+      "name": "Microzona propensa — São Torquato D",
+      "severity": "attention",
+      "positions": [
+        [
+          -20.3341,
+          -40.3468
+        ],
+        [
+          -20.33355,
+          -40.34655
+        ],
+        [
+          -20.33345,
+          -40.34605
+        ],
+        [
+          -20.334,
+          -40.3461
+        ]
+      ]
+    },
+    {
+      "id": "poly7",
+      "name": "Microzona propensa — Paul C",
+      "severity": "critical",
+      "positions": [
+        [
+          -20.33535,
+          -40.33755
+        ],
+        [
+          -20.33475,
+          -40.33735
+        ],
+        [
+          -20.33465,
+          -40.33675
+        ],
+        [
+          -20.3352,
+          -40.33665
+        ]
+      ]
+    }
+  ],
+  "floodedStreets": [
+    {
+      "id": "fs1",
+      "name": "Avenida Anésio José Simões",
+      "severity": "critical",
+      "depthCm": 38,
+      "updatedAt": "10:25",
+      "routeFrom": {
+        "lat": -20.32941,
+        "lng": -40.350823
+      },
+      "routeTo": {
+        "lat": -20.3279,
+        "lng": -40.3457
+      },
+      "positions": [
+        [
+          -20.32941,
+          -40.350823
+        ],
+        [
+          -20.32912,
+          -40.3499
+        ],
+        [
+          -20.32882,
+          -40.3489
+        ],
+        [
+          -20.32852,
+          -40.3479
+        ],
+        [
+          -20.32818,
+          -40.34685
+        ],
+        [
+          -20.3279,
+          -40.3457
+        ]
+      ],
+      "routeSource": "OSRM/OpenStreetMap"
+    },
+    {
+      "id": "fs2",
+      "name": "Avenida Senador Robert Kennedy",
+      "severity": "alert",
+      "depthCm": 24,
+      "updatedAt": "10:20",
+      "routeFrom": {
+        "lat": -20.3312,
+        "lng": -40.3538
+      },
+      "routeTo": {
+        "lat": -20.32766,
+        "lng": -40.352631
+      },
+      "positions": [
+        [
+          -20.3312,
+          -40.3538
+        ],
+        [
+          -20.3305,
+          -40.35355
+        ],
+        [
+          -20.3297,
+          -40.35325
+        ],
+        [
+          -20.3289,
+          -40.35295
+        ],
+        [
+          -20.3282,
+          -40.35273
+        ],
+        [
+          -20.32766,
+          -40.352631
+        ]
+      ],
+      "routeSource": "OSRM/OpenStreetMap"
+    },
+    {
+      "id": "fs3",
+      "name": "Avenida Jerônimo Monteiro — Paul",
+      "severity": "attention",
+      "depthCm": 16,
+      "updatedAt": "10:12",
+      "routeFrom": {
+        "lat": -20.34079,
+        "lng": -40.32729
+      },
+      "routeTo": {
+        "lat": -20.3331637,
+        "lng": -40.33604
+      },
+      "positions": [
+        [
+          -20.34079,
+          -40.32729
+        ],
+        [
+          -20.3399,
+          -40.32855
+        ],
+        [
+          -20.3389,
+          -40.32985
+        ],
+        [
+          -20.3377,
+          -40.3313
+        ],
+        [
+          -20.33645,
+          -40.33275
+        ],
+        [
+          -20.3352,
+          -40.3341
+        ],
+        [
+          -20.3341,
+          -40.33525
+        ],
+        [
+          -20.333164,
+          -40.33604
+        ]
+      ],
+      "routeSource": "OSRM/OpenStreetMap"
+    },
+    {
+      "id": "fs4",
+      "name": "Avenida Graça Aranha — trecho demonstrativo",
+      "severity": "alert",
+      "depthCm": 22,
+      "updatedAt": "10:17",
+      "routeFrom": {
+        "lat": -20.3351,
+        "lng": -40.3478
+      },
+      "routeTo": {
+        "lat": -20.3339,
+        "lng": -40.3468
+      },
+      "positions": [
+        [
+          -20.3351,
+          -40.3478
+        ],
+        [
+          -20.3348,
+          -40.3475
+        ],
+        [
+          -20.3345,
+          -40.3472
+        ],
+        [
+          -20.3342,
+          -40.347
+        ],
+        [
+          -20.3339,
+          -40.3468
+        ]
+      ],
+      "routeSource": "OSRM/OpenStreetMap"
+    },
+    {
+      "id": "fs5",
+      "name": "Avenida Estação — trecho demonstrativo",
+      "severity": "attention",
+      "depthCm": 14,
+      "updatedAt": "10:11",
+      "routeFrom": {
+        "lat": -20.3325,
+        "lng": -40.3488
+      },
+      "routeTo": {
+        "lat": -20.3317,
+        "lng": -40.3479
+      },
+      "positions": [
+        [
+          -20.3325,
+          -40.3488
+        ],
+        [
+          -20.3323,
+          -40.3486
+        ],
+        [
+          -20.3321,
+          -40.3484
+        ],
+        [
+          -20.3319,
+          -40.3481
+        ],
+        [
+          -20.3317,
+          -40.3479
+        ]
+      ],
+      "routeSource": "OSRM/OpenStreetMap"
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "name": "São Torquato",
+  "city": "Vila Velha",
+  "state": "ES",
+  "situation": "alert",
+  "situationLabel": "Zona de Atenção",
+  "situationMessage": "Há risco de alagamentos. Fique atento aos alertas e evite áreas de risco.",
+  "riverLevel": 3.2,
+  "riverVariation": 0.4,
+  "station": "Estação São Torquato",
+  "riskAreas": [
+    {
+      "id": "r1",
+      "name": "Rua das Flores",
+      "severity": "attention",
+      "description": "Risco demonstrativo de alagamento",
+      "lat": -20.3325,
+      "lng": -40.3483
+    },
+    {
+      "id": "r2",
+      "name": "Avenida Central",
+      "severity": "alert",
+      "description": "Histórico demonstrativo de alagamentos",
+      "lat": -20.3377,
+      "lng": -40.342
+    },
+    {
+      "id": "r3",
+      "name": "Praça do Rio",
+      "severity": "critical",
+      "description": "Área demonstrativa de monitoramento",
+      "lat": -20.3308,
+      "lng": -40.3553
+    },
+    {
+      "id": "r4",
+      "name": "Avenida Graça Aranha",
+      "severity": "alert",
+      "description": "Área demonstrativa próxima aos pontos de monitoramento.",
+      "lat": -20.3351,
+      "lng": -40.3478
+    },
+    {
+      "id": "r5",
+      "name": "Avenida Estação",
+      "severity": "attention",
+      "description": "Trecho demonstrativo acompanhado pelo protótipo.",
+      "lat": -20.3325,
+      "lng": -40.3488
+    },
+    {
+      "id": "r6",
+      "name": "Avenida Leopoldina",
+      "severity": "normal",
+      "description": "Ponto de referência em condição normal no cenário demonstrativo.",
+      "lat": -20.3338,
+      "lng": -40.3447
+    },
+    {
+      "id": "r7",
+      "name": "Rua Central",
+      "severity": "alert",
+      "description": "Trecho demonstrativo com atenção para alagamento.",
+      "lat": -20.336,
+      "lng": -40.353
+    },
+    {
+      "id": "r8",
+      "name": "Trecho de Paul — monitoramento",
+      "severity": "critical",
+      "description": "Ponto demonstrativo de prioridade elevada.",
+      "lat": -20.335,
+      "lng": -40.3372
+    }
+  ],
+  "guidance": [
+    "Evite transitar em áreas alagadas.",
+    "Mantenha seus documentos em local seguro.",
+    "Fique atento aos alertas oficiais.",
+    "Em emergência, procure os canais oficiais."
+  ]
+}

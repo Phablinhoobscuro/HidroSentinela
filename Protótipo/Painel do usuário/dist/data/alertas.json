@@ -1,0 +1,101 @@
+[
+  {
+    "id": "a1",
+    "title": "Nível do rio em elevação",
+    "description": "O nível do rio atingiu 3,2 m e continua subindo. Fique atento e evite áreas de risco.",
+    "time": "Hoje · 10:24",
+    "severity": "alert",
+    "active": true,
+    "type": "river"
+  },
+  {
+    "id": "a2",
+    "title": "Possibilidade de alagamentos",
+    "description": "Há previsão de alagamentos em áreas próximas ao eixo monitorado.",
+    "time": "Hoje · 08:15",
+    "severity": "attention",
+    "active": true,
+    "type": "flood"
+  },
+  {
+    "id": "a3",
+    "title": "Chuva intensa prevista",
+    "description": "Previsão de chuva forte nas próximas 24 horas.",
+    "time": "Hoje · 07:30",
+    "severity": "alert",
+    "active": true,
+    "type": "rain"
+  },
+  {
+    "id": "a4",
+    "title": "Trânsito em áreas afetadas",
+    "description": "Algumas vias podem apresentar interdições devido ao alagamento.",
+    "time": "Ontem · 18:40",
+    "severity": "attention",
+    "active": false,
+    "type": "traffic"
+  },
+  {
+    "id": "a5",
+    "title": "Situação normalizada",
+    "description": "O nível monitorado voltou ao patamar normal em uma área da região.",
+    "time": "Ontem · 14:20",
+    "severity": "normal",
+    "active": false,
+    "type": "normal"
+  },
+  {
+    "id": "a6",
+    "title": "Trecho de via com alagamento",
+    "description": "Trecho demonstrativo de via com lâmina d'água. Evite a passagem e procure rota alternativa.",
+    "time": "Hoje · 10:17",
+    "severity": "alert",
+    "active": true,
+    "type": "flood"
+  },
+  {
+    "id": "a7",
+    "title": "Ponto amostral em nível crítico",
+    "description": "Um ponto de monitoramento atingiu nível crítico no cenário demonstrativo.",
+    "time": "Hoje · 10:05",
+    "severity": "critical",
+    "active": true,
+    "type": "river"
+  },
+  {
+    "id": "a8",
+    "title": "Chuva acumulada elevada",
+    "description": "Acumulado horário demonstrativo acima da faixa de atenção na região monitorada.",
+    "time": "Hoje · 09:48",
+    "severity": "attention",
+    "active": true,
+    "type": "rain"
+  },
+  {
+    "id": "a9",
+    "title": "Acesso alternativo recomendado",
+    "description": "A simulação indica necessidade de evitar um trecho viário afetado e utilizar acesso alternativo.",
+    "time": "Hoje · 09:35",
+    "severity": "attention",
+    "active": true,
+    "type": "traffic"
+  },
+  {
+    "id": "a10",
+    "title": "Ponto de monitoramento normalizado",
+    "description": "A leitura voltou para uma faixa considerada normal no cenário demonstrativo.",
+    "time": "Hoje · 08:50",
+    "severity": "normal",
+    "active": false,
+    "type": "normal"
+  },
+  {
+    "id": "a11",
+    "title": "Nível estabilizado em Paul",
+    "description": "O nível demonstrativo permaneceu estável durante a última leitura.",
+    "time": "Hoje · 08:20",
+    "severity": "normal",
+    "active": false,
+    "type": "river"
+  }
+]

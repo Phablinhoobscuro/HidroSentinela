@@ -1,0 +1,83 @@
+[
+  {
+    "id": "n1",
+    "title": "Defesa Civil alerta sobre chuva intensa para os próximos dias",
+    "category": "comunicados",
+    "date": "Hoje",
+    "time": "10:15",
+    "summary": "Publicação fictícia usada exclusivamente para demonstrar como notícias podem aparecer no portal.",
+    "image": "https://images.unsplash.com/photo-1501691223387-dd0500403074?auto=format&fit=crop&w=900&q=80"
+  },
+  {
+    "id": "n2",
+    "title": "Prefeitura inicia limpeza de bueiros em áreas críticas",
+    "category": "ações",
+    "date": "Ontem",
+    "time": "16:30",
+    "summary": "Exemplo fictício de atualização sobre ação preventiva em áreas monitoradas.",
+    "image": "https://images.unsplash.com/photo-1624806992066-5ffcf7ca1869?auto=format&fit=crop&w=900&q=80"
+  },
+  {
+    "id": "n3",
+    "title": "Como se proteger em caso de alagamento",
+    "category": "prevenção",
+    "date": "Ontem",
+    "time": "10:20",
+    "summary": "Orientações fictícias de prevenção apresentadas como conteúdo demonstrativo.",
+    "image": "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?auto=format&fit=crop&w=900&q=80"
+  },
+  {
+    "id": "n4",
+    "title": "Obras de contenção no Rio Principal",
+    "category": "ações",
+    "date": "28/09/2026",
+    "time": "14:25",
+    "summary": "Exemplo fictício de comunicação institucional dentro do protótipo.",
+    "image": "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=900&q=80"
+  },
+  {
+    "id": "n5",
+    "title": "Mapa demonstra novos pontos de monitoramento",
+    "category": "comunicados",
+    "date": "Hoje",
+    "time": "09:40",
+    "summary": "Atualização fictícia mostrando a ampliação da amostragem em São Torquato e Paul.",
+    "image": "https://images.unsplash.com/photo-1524666041070-9c8769a9e7a2?auto=format&fit=crop&w=900&q=80"
+  },
+  {
+    "id": "n6",
+    "title": "Orientações para deslocamento em áreas afetadas",
+    "category": "prevenção",
+    "date": "Hoje",
+    "time": "09:10",
+    "summary": "Conteúdo demonstrativo com recomendações para evitar trechos alagados e reduzir exposição ao risco.",
+    "image": "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=900&q=80"
+  },
+  {
+    "id": "n7",
+    "title": "Novos pontos de leitura incluídos na simulação",
+    "category": "ações",
+    "date": "Ontem",
+    "time": "17:20",
+    "summary": "Exemplo de atualização fictícia do conjunto de dados usado pelo protótipo.",
+    "image": "https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=900&q=80"
+  },
+  {
+    "id": "n8",
+    "title": "Entenda os níveis de risco do HidroSentinela",
+    "category": "prevenção",
+    "date": "Ontem",
+    "time": "13:45",
+    "summary": "Explicação demonstrativa das categorias Normal, Atenção, Alerta e Crítico.",
+    "image": "https://images.unsplash.com/photo-1532187643603-ba119ca4109e?auto=format&fit=crop&w=900&q=80"
+  },
+  {
+    "id": "n9",
+    "title": "Monitoramento ampliado no eixo São Torquato–Paul",
+    "category": "comunicados",
+    "date": "28/09/2026",
+    "time": "11:30",
+    "summary": "Exemplo fictício de comunicação sobre expansão da área de observação do protótipo.",
+    "image": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=900&q=80"
+  }
+]
