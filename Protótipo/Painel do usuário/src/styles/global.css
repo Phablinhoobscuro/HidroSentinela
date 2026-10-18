@@ -2510,7 +2510,7 @@ button {
   }
 
   .map-dashboard-page .map-legend strong {
-    font-size: 10px;
+    font-size: 9px;
   }
   .map-dashboard-page .map-legend span {
     font-size: 7.5px;
@@ -2840,7 +2840,7 @@ button {
   }
 
   .map-dashboard-page .map-info-rail {
-    top: 164px;
+    top: 175px;
     right: var(--map-edge);
     left: auto;
     bottom: auto;
@@ -2902,11 +2902,11 @@ button {
   .map-dashboard-page .map-legend {
     top: 51px;
     right: var(--map-edge);
-    padding: 8px 9px;
+    padding: 5px 5px;
   }
 
   .map-dashboard-page .map-info-rail {
-    top: 158px;
+    top: 185px;
     right: var(--map-edge);
     width: var(--map-rail-width);
     gap: 5px;
