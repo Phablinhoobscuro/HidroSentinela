@@ -9,7 +9,7 @@ let nanoid = (size = 21) => {
 	return id;
 };
 //#endregion
-//#region \0@oxc-project+runtime@0.151.0/helpers/esm/typeof.js
+//#region \0@oxc-project+runtime@0.154.0/helpers/esm/typeof.js
 function _typeof(o) {
 	"@babel/helpers - typeof";
 	return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(o) {
@@ -19,7 +19,7 @@ function _typeof(o) {
 	}, _typeof(o);
 }
 //#endregion
-//#region \0@oxc-project+runtime@0.151.0/helpers/esm/toPrimitive.js
+//#region \0@oxc-project+runtime@0.154.0/helpers/esm/toPrimitive.js
 function toPrimitive(t, r) {
 	if ("object" != _typeof(t) || !t) return t;
 	var e = t[Symbol.toPrimitive];
@@ -31,13 +31,13 @@ function toPrimitive(t, r) {
 	return ("string" === r ? String : Number)(t);
 }
 //#endregion
-//#region \0@oxc-project+runtime@0.151.0/helpers/esm/toPropertyKey.js
+//#region \0@oxc-project+runtime@0.154.0/helpers/esm/toPropertyKey.js
 function toPropertyKey(t) {
 	var i = toPrimitive(t, "string");
 	return "symbol" == _typeof(i) ? i : i + "";
 }
 //#endregion
-//#region \0@oxc-project+runtime@0.151.0/helpers/esm/defineProperty.js
+//#region \0@oxc-project+runtime@0.154.0/helpers/esm/defineProperty.js
 function _defineProperty(e, r, t) {
 	return (r = toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
 		value: t,
@@ -73,8 +73,8 @@ var HMRContext = class {
 		else if (Array.isArray(deps)) this.acceptDeps(deps, callback);
 		else throw new Error(`invalid hot.accept() usage.`);
 	}
-	acceptExports(_, callback) {
-		this.acceptDeps([this.ownerPath], ([mod]) => callback?.(mod));
+	acceptExports(exportNames, callback) {
+		this.acceptDeps([this.ownerPath], ([mod]) => callback?.(mod), typeof exportNames === "string" ? [exportNames] : exportNames);
 	}
 	dispose(cb) {
 		this.hmrClient.disposeMap.set(this.ownerPath, cb);
@@ -127,14 +127,15 @@ var HMRContext = class {
 			data
 		});
 	}
-	acceptDeps(deps, callback = () => {}) {
+	acceptDeps(deps, callback = () => {}, exports) {
 		const mod = this.hmrClient.hotModulesMap.get(this.ownerPath) || {
 			id: this.ownerPath,
 			callbacks: []
 		};
 		mod.callbacks.push({
 			deps,
-			fn: callback
+			fn: callback,
+			exports
 		});
 		this.hmrClient.hotModulesMap.set(this.ownerPath, mod);
 	}
@@ -245,12 +246,31 @@ var BundledDevHMRClient = class extends HMRClient {
 		this.applyQueue = Promise.resolve();
 		this.lastSeq = 0;
 		this.reloadPending = false;
+		this.orphans = /* @__PURE__ */ new Set();
 	}
 	isSelfAccepted(id) {
-		return this.hotModulesMap.get(id)?.callbacks.some((c) => c.deps.includes(id)) ?? false;
+		return this.acceptsDep(id, id);
 	}
 	acceptsDep(parent, id) {
-		return this.hotModulesMap.get(parent)?.callbacks.some((c) => c.deps.includes(id)) ?? false;
+		return this.hotModulesMap.get(parent)?.callbacks.some((c) => !c.exports && c.deps.includes(id)) ?? false;
+	}
+	getAcceptedExports(id) {
+		let accepted;
+		for (const c of this.hotModulesMap.get(id)?.callbacks ?? []) {
+			if (!c.exports) continue;
+			accepted ?? (accepted = /* @__PURE__ */ new Set());
+			for (const name of c.exports) accepted.add(name);
+		}
+		return accepted;
+	}
+	acceptsAllExports(id, accepted) {
+		const exports = this.runtime.loadExports(id);
+		if (typeof exports !== "object" || exports == null) return false;
+		return Object.keys(exports).every((name) => accepted.has(name));
+	}
+	importsOnlyAccepted(parent, id, accepted) {
+		if (!this.options.partialAccept) return false;
+		return this.runtime.getImportedBindings(parent, id)?.every((name) => accepted.has(name)) ?? false;
 	}
 	computeHmrUpdate(changedIds, opts) {
 		const boundaries = [];
@@ -261,30 +281,39 @@ var BundledDevHMRClient = class extends HMRClient {
 			const fullReload = this.bubble(changed, [changed], updateSet, boundaries, opts?.firstInvalidatedBy, traversedModules);
 			if (fullReload) return fullReload;
 		}
-		return boundaries.length ? {
-			type: "boundaries",
+		return {
+			type: "update",
 			boundaries,
 			updateSet: [...updateSet]
-		} : { type: "noop" };
+		};
+	}
+	getImports(id) {
+		return [...this.runtime.staticImports.get(id)?.edges ?? [], ...this.runtime.dynamicImports.get(id)?.edges ?? []];
+	}
+	hasExecutedImporter(id) {
+		return this.runtime.getImporters(id).some((importer) => this.runtime.isExecuted(importer));
 	}
 	bubble(id, stack, updateSet, boundaries, firstInvalidatedBy, traversedModules) {
 		if (traversedModules.has(id)) return;
 		traversedModules.add(id);
 		updateSet.add(id);
+		if (this.orphans.has(id) && !this.hasExecutedImporter(id)) return;
 		if (firstInvalidatedBy !== void 0 && id === firstInvalidatedBy) return {
 			type: "full-reload",
 			reason: `update propagated back to ${firstInvalidatedBy}, which already called \`import.meta.hot.invalidate()\``
 		};
-		if (this.isSelfAccepted(id)) {
+		const acceptedExports = this.getAcceptedExports(id);
+		const selfAccepted = this.isSelfAccepted(id) || acceptedExports !== void 0 && this.acceptsAllExports(id, acceptedExports);
+		if (selfAccepted || acceptedExports) {
 			boundaries.push({
 				boundary: id,
 				acceptedVia: id,
 				isWithinCircularImport: this.isNodeWithinCircularImports(id, stack)
 			});
-			return;
+			if (selfAccepted) return;
 		}
 		const parents = this.runtime.getImporters(id).filter((p) => this.runtime.isExecuted(p));
-		if (!parents.length) return {
+		if (!acceptedExports && !parents.length) return {
 			type: "full-reload",
 			reason: `no hmr boundary found for module \`${id}\``
 		};
@@ -298,6 +327,7 @@ var BundledDevHMRClient = class extends HMRClient {
 				});
 				continue;
 			}
+			if (acceptedExports && this.importsOnlyAccepted(parent, id, acceptedExports)) continue;
 			if (!stack.includes(parent)) {
 				const fullReload = this.bubble(parent, subChain, updateSet, boundaries, firstInvalidatedBy, traversedModules);
 				if (fullReload) return fullReload;
@@ -359,14 +389,16 @@ var BundledDevHMRClient = class extends HMRClient {
 		}
 		this.lastSeq = seq;
 		const update = this.computeHmrUpdate(changedIds);
-		if (update.type === "noop") return;
 		if (update.type === "full-reload") {
 			this.requestFullReload(update.reason);
 			return;
 		}
+		if (!update.updateSet.length) return;
+		const notify = update.boundaries.length > 0;
 		const listenerPayload = this.toUpdatePayload(update.boundaries, void 0);
-		await this.notifyListeners("vite:beforeUpdate", listenerPayload);
+		if (notify) await this.notifyListeners("vite:beforeUpdate", listenerPayload);
 		if (this.options.beforeApply() === "reload") return;
+		const importsBeforePatch = changedIds.flatMap((id) => this.getImports(id));
 		try {
 			await import(
 				/* @vite-ignore */
@@ -376,8 +408,9 @@ var BundledDevHMRClient = class extends HMRClient {
 			this.requestFullReload(`failed to import hmr patch ${url}`);
 			return;
 		}
+		for (const id of importsBeforePatch) if (this.runtime.isExecuted(id) && !this.hasExecutedImporter(id)) this.orphans.add(id);
 		await this.applyUpdate(update);
-		await this.notifyListeners("vite:afterUpdate", listenerPayload);
+		if (notify) await this.notifyListeners("vite:afterUpdate", listenerPayload);
 	}
 	async applyInvalidate(id) {
 		if (this.reloadPending) return;
@@ -388,16 +421,16 @@ var BundledDevHMRClient = class extends HMRClient {
 			return;
 		}
 		const update = this.computeHmrUpdate(importers, { firstInvalidatedBy });
-		if (update.type === "noop") return;
 		if (update.type === "full-reload") {
 			this.requestFullReload(update.reason);
 			return;
 		}
+		const notify = update.boundaries.length > 0;
 		const listenerPayload = this.toUpdatePayload(update.boundaries, firstInvalidatedBy);
-		await this.notifyListeners("vite:beforeUpdate", listenerPayload);
+		if (notify) await this.notifyListeners("vite:beforeUpdate", listenerPayload);
 		if (this.options.beforeApply() === "reload") return;
 		await this.applyUpdate(update, firstInvalidatedBy);
-		await this.notifyListeners("vite:afterUpdate", listenerPayload);
+		if (notify) await this.notifyListeners("vite:afterUpdate", listenerPayload);
 	}
 	async applyUpdate(update, firstInvalidatedBy) {
 		for (const id of update.updateSet) if (!this.runtime.hasFactory(id)) {
@@ -494,11 +527,22 @@ SOURCEMAPPING_URL += "ppingURL";
 typeof process !== "undefined" && process.platform;
 /**
 * Prepend `/@id/` and replace null byte so the id is URL-safe.
-* This is prepended to resolved ids that are not valid browser
-* import specifiers by the importAnalysis plugin.
+* BrowserURL rendering wraps ModuleURLs that are not valid browser import
+* specifiers before adding base.
 */
 function wrapId(id) {
-	return id.startsWith(VALID_ID_PREFIX) ? id : VALID_ID_PREFIX + id.replace("\0", NULL_BYTE_PLACEHOLDER);
+	return id.startsWith("/@id/") ? id : VALID_ID_PREFIX + id.replace("\0", NULL_BYTE_PLACEHOLDER);
+}
+/** Render a decoded ModuleURL as a BrowserURL, wrapping virtual IDs and adding base. */
+function moduleUrlToBrowserUrl(moduleUrl, base) {
+	const browserUrl = moduleUrl[0] !== "." && moduleUrl[0] !== "/" ? wrapId(moduleUrl) : moduleUrl;
+	return base ? joinUrlSegments(base, browserUrl) : browserUrl;
+}
+function joinUrlSegments(a, b) {
+	if (!a || !b) return a || b || "";
+	if (a.endsWith("/")) a = a.substring(0, a.length - 1);
+	if (b[0] !== "/") b = "/" + b;
+	return a + b;
 }
 (async function() {}).constructor;
 function promiseWithResolvers() {
@@ -1246,18 +1290,14 @@ const debounceReload = (time) => {
 	};
 };
 const pageReload = debounceReload(20);
-function wrapIdIfNeeded(id) {
-	return id[0] === "." || id[0] === "/" ? id : wrapId(id);
-}
 const hmrClient = new HMRClient({
 	error: (err) => console.error("[vite]", err),
 	debug: (...msg) => console.debug("[vite]", ...msg)
 }, transport, async function importUpdatedModule({ acceptedPath, timestamp, explicitImportRequired, isWithinCircularImport }) {
 	const [acceptedPathWithoutQuery, query] = acceptedPath.split(`?`);
-	const browserPath = wrapIdIfNeeded(acceptedPathWithoutQuery);
 	const importPromise = import(
 		/* @vite-ignore */
-		base + browserPath.slice(1) + `?${explicitImportRequired ? "import&" : ""}t=${timestamp}${query ? `&${query}` : ""}`
+		moduleUrlToBrowserUrl(`${acceptedPathWithoutQuery}?${explicitImportRequired ? "import&" : ""}t=${timestamp}${query ? `&${query}` : ""}`, base)
 );
 	if (isWithinCircularImport) importPromise.catch(() => {
 		console.info(`[hmr] ${acceptedPath} failed to apply HMR as it's within a circular import. Reloading page to reset the execution order. To debug and break the circular import, you can run \`vite --debug hmr\` to log the circular dependency path if a file change triggered it.`);
@@ -1300,10 +1340,10 @@ async function handleMessage(payload) {
 				const searchUrl = cleanUrl(path);
 				const el = Array.from(document.querySelectorAll("link")).find((e) => !outdatedLinkTags.has(e) && cleanUrl(e.href).includes(searchUrl));
 				if (!el) return;
-				const newPath = `${base}${searchUrl.slice(1)}${searchUrl.includes("?") ? "&" : "?"}t=${timestamp}`;
+				const browserUrl = moduleUrlToBrowserUrl(`${searchUrl}${searchUrl.includes("?") ? "&" : "?"}t=${timestamp}`, base);
 				return new Promise((resolve) => {
 					const newLinkTag = el.cloneNode();
-					newLinkTag.href = new URL(newPath, el.href).href;
+					newLinkTag.href = new URL(browserUrl, el.href).href;
 					const removeOldEl = () => {
 						el.remove();
 						console.debug(`[vite] css hot updated: ${searchUrl}`);
@@ -1535,7 +1575,7 @@ function updateStyle(id, content) {
 			}, 0);
 		} else lastInsertedStyle.insertAdjacentElement("afterend", style);
 		lastInsertedStyle = style;
-	} else style.textContent = content;
+	} else if (style.textContent !== content) style.textContent = content;
 	sheetsMap.set(id, style);
 }
 function removeStyle(id) {
@@ -1549,8 +1589,8 @@ function removeStyle(id) {
 		sheetsMap.delete(id);
 	}
 }
-function createHotContext(ownerPath) {
-	return new HMRContext(hmrClient, ownerPath);
+function createHotContext(moduleUrl) {
+	return new HMRContext(hmrClient, moduleUrl);
 }
 /**
 * urls here are dynamic import() urls that couldn't be statically analyzed
@@ -1574,12 +1614,7 @@ if (typeof DevRuntime !== "undefined") {
 			});
 		}
 		createModuleHotContext(moduleId) {
-			const ctx = new BundledDevHMRContext(bundledDevHmrClient, moduleId);
-			ctx._internal = {
-				updateStyle,
-				removeStyle
-			};
-			return ctx;
+			return new BundledDevHMRContext(bundledDevHmrClient, moduleId);
 		}
 	}
 	const clientId = nanoid();
@@ -1594,6 +1629,7 @@ if (typeof DevRuntime !== "undefined") {
 		debug: (...msg) => console.debug("[vite]", ...msg)
 	}, transport, runtime, {
 		base,
+		partialAccept: __HMR_PARTIAL_ACCEPT__,
 		beforeApply: clearOverlayOrReloadOnFirstUpdate
 	});
 	registerBundledDevClient(bundledDevHmrClient);

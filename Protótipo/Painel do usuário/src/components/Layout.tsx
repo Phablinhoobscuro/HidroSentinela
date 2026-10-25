@@ -3,7 +3,6 @@ import { useState } from 'react'
 
 const menu = [
   { to: '/app', label: 'Início', icon: '⌂' },
-  { to: '/app/mapa', label: 'Mapa', icon: '▣' },
   { to: '/app/alertas', label: 'Alertas', icon: '!' },
   { to: '/app/minha-regiao', label: 'Minha Região', icon: '⌖' },
   { to: '/app/noticias', label: 'Notícias', icon: '▤' },
@@ -39,10 +38,6 @@ export function Layout() {
             </NavLink>
           ))}
         </nav>
-        <div className="profile-mini">
-          <div className="avatar">JS</div>
-          <div><strong>João Silva</strong><span>Morador</span></div>
-        </div>
       </aside>
 
       {open && <button className="mobile-menu-backdrop" aria-label="Fechar menu" onClick={() => setOpen(false)} />}
