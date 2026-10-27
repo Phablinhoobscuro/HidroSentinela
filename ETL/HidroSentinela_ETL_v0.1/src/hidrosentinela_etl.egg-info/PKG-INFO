@@ -1,0 +1,8 @@
+Metadata-Version: 2.4
+Name: hidrosentinela-etl
+Version: 0.1.0
+Summary: Pipeline ETL do projeto HidroSentinela
+Requires-Python: >=3.11
+Requires-Dist: psycopg[binary]<4,>=3.2
+Requires-Dist: requests<3,>=2.32
+Requires-Dist: python-dotenv<2,>=1.0
